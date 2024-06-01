@@ -27,39 +27,30 @@ if $is_supervisor; then
     if [ "$password" == "$SUPERVISOR_PASSWORD" ]; then
         echo "Supervisor $username authenticated."
     else
-        gum confirm "Incorrect password for $username" --ok-label "Try Again"
-        exec 3>&-
-        exit 1
+        gum confirm "Incorrect password for $username" --affirmative "Try Again" || exit 1
     fi
 else
-    gum confirm "Non-supervisor user" --ok-label "Exit"
-    exec 3>&-
-    exit 1
+    gum confirm "Non-supervisor user" --affirmative "Exit" || exit 1
 fi
 
 while true; do
     action=$(gum choose "Send Message" "Receive Messages" "Send File" "View Files" "Exit")
-    echo "$action" >&3
-    case $action in
+    case "$action" in
         "Send Message")
             message=$(gum input --prompt "Enter the message: ")
-            echo "send_message" >&3
-            echo "$message" >&3
             ;;
         "Receive Messages")
             echo "receive_messages" >&3
-            read -r messages <&3
-            gum pager --header "Received Messages" --content "$messages"
+            gum log --level info "$message"
             ;;
         "Send File")
             echo "send_file" >&3
-            file_path=$(gum file --folder "$(pwd)")
+            file_path=$(gum file "$(pwd)")
             cat "$file_path" >&3
             ;;
         "View Files")
-            echo "view_files" >&3
-            read -r files <&3
-            gum pager --header "Files on the Server" --content "$files"
+            chosen = $(gum file --all $SERVER_ADDR)
+            gum pager > $chosen
             ;;
         "Exit")
             exec 3>&-
