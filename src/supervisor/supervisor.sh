@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Server address and port
-SERVER_ADDR=192.168.1.11
+SERVER_ADDR=$(gum input --placeholder="Server IP")
+SERVER_USER=$(gum input --placeholder="Remote Username")
 SERVER_PORT=8080
 
 # List of authorized supervisor computers
@@ -39,16 +40,15 @@ while true; do
         "Send Message")
             message=$(gum input --prompt "Enter the message: ")
             echo $message >> messages.txt
-            scp messages.txt
+            scp messages.txt "$SERVER_USER"@"$SERVER_ADDR":/files/
             ;;
         "Receive Messages")
             echo "receive_messages" >&3
             gum pager < messages.txt
             ;;
         "Send File")
-            echo "send_file" >&3
             file_path=$(gum file "$(pwd)")
-            scp $file_path 3<>/dev/tcp/$SERVER_ADDR/$SERVER_PORT
+             scp $file_path "$SERVER_USER"@"$SERVER_ADDR":/files/
             ;;
         "View Files")
             chosen = $(gum file --all $SERVER_ADDR)
