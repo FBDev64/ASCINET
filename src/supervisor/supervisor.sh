@@ -38,15 +38,17 @@ while true; do
     case "$action" in
         "Send Message")
             message=$(gum input --prompt "Enter the message: ")
+            echo $message >> messages.txt
+            scp messages.txt
             ;;
         "Receive Messages")
             echo "receive_messages" >&3
-            gum log --level info "$message"
+            gum pager < messages.txt
             ;;
         "Send File")
             echo "send_file" >&3
             file_path=$(gum file "$(pwd)")
-            cat "$file_path" >&3
+            scp $file_path 3<>/dev/tcp/$SERVER_ADDR/$SERVER_PORT
             ;;
         "View Files")
             chosen = $(gum file --all $SERVER_ADDR)
