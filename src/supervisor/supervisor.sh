@@ -11,7 +11,7 @@ SUPERVISOR_PASSWORD="3310"
 
 # Connect to the server
 exec 3<>/dev/tcp/$SERVER_ADDR/$SERVER_PORT || exit 1
-echo "Connected to $SERVER_ADDR:$SERVER_PORT" >&2
+gum log --level info "Connected to $SERVER_ADDR:$SERVER_PORT" >&2
 
 # Authenticate supervisor
 username=$(gum input --prompt "Enter username: ")
@@ -38,24 +38,34 @@ while true; do
     action=$(gum choose "Send Message" "Receive Messages" "Send File" "View Files" "Exit")
     case "$action" in
         "Send Message")
+             if [[ "$-" == *x* ]]; then
+                gum log --level debug "Sending Message..."
+            fi
             message=$(gum input --prompt "Enter the message: ")
             echo $message >> messages.txt
             scp messages.txt "$SERVER_USER"@"$SERVER_ADDR":/files/
             ;;
         "Receive Messages")
-            echo "receive_messages" >&3
+             if [[ "$-" == *x* ]]; then
+                gum log --level debug "Receiving messages..."
+            fi
             gum pager < messages.txt
             ;;
         "Send File")
+            if [[ "$-" == *x* ]]; then
+                gum log --level debug "Sending file..."
+            fi
             file_path=$(gum file "$(pwd)")
-             scp $file_path "$SERVER_USER"@"$SERVER_ADDR":/files/
+            scp $file_path "$SERVER_USER"@"$SERVER_ADDR":/files/
             ;;
         "View Files")
+            if [[ "$-" == *x* ]]; then
+                gum log --level debug "Viewing files..."
+            fi
             chosen = $(gum file --all $SERVER_ADDR)
             gum pager > $chosen
             ;;
-        "Exit")
-            exec 3>&-
+        "Quit")
             exit 0
             ;;
     esac
