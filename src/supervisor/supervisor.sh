@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Server address and port
-SERVER_ADDR=$(gum input --placeholder="Server IP")
-SERVER_USER=$(gum input --placeholder="Remote Username")
+
+
+
+SERVER_HOSTNAME=$(gum input --placeholder="user@ip")
 SERVER_PORT=8080
 
 # List of authorized supervisor computers
@@ -10,11 +12,11 @@ SUPERVISORS=("fbdev")
 SUPERVISOR_PASSWORD="3310"
 
 # Connect to the server
-exec 3<>/dev/tcp/$SERVER_ADDR/$SERVER_PORT || exit 1
-gum log --level info "Connected to $SERVER_ADDR:$SERVER_PORT" >&2
+exec 3<>/dev/tcp/$SERVER_HOSTNAME/$SERVER_PORT || exit 1
+gum log --level info "Connected to $SERVER_HOSTNAME:$SERVER_PORT" >&2
 
 # Authenticate supervisor
-username=$(gum input --prompt "Enter username: ")
+username=$(gum input --placeholder="Enter username: ")
 is_supervisor=false
 for supervisor in "${SUPERVISORS[@]}"; do
     if [ "$supervisor" == "$username" ]; then
@@ -24,7 +26,7 @@ for supervisor in "${SUPERVISORS[@]}"; do
 done
 
 if $is_supervisor; then
-    password=$(gum input --password --prompt "Enter password: ")
+    password=$(gum input --password --placeholder="Enter password: ")
     if [ "$password" == "$SUPERVISOR_PASSWORD" ]; then
         echo "Supervisor $username authenticated."
     else
@@ -35,35 +37,27 @@ else
 fi
 
 while true; do
-    action=$(gum choose "Send Message" "Receive Messages" "Send File" "View Files" "Exit")
+    action=$(gum choose "Alert" "Send Message" "Send File" "View Files" "Help" "Quit")
     case "$action" in
-        "Send Message")
-             if [[ "$-" == *x* ]]; then
-                gum log --level debug "Sending Message..."
-            fi
-            message=$(gum input --prompt "Enter the message: ")
-            echo $message >> messages.txt
-            scp messages.txt "$SERVER_USER"@"$SERVER_ADDR":/files/
+        "Alert")
+            ALERT_MSG = $(gum input --placeholder="Alert Message: ")
+            gum log --level warn "$ALERT_MSG"
             ;;
-        "Receive Messages")
-             if [[ "$-" == *x* ]]; then
-                gum log --level debug "Receiving messages..."
-            fi
-            gum pager < messages.txt
+        "Send Message")
+            message=$(gum input --prompt "Enter the message: ")
+            echo "$message" > /dev/tty
+            gum log --level info "$message"
             ;;
         "Send File")
-            if [[ "$-" == *x* ]]; then
-                gum log --level debug "Sending file..."
-            fi
             file_path=$(gum file "$(pwd)")
-            scp $file_path "$SERVER_USER"@"$SERVER_ADDR":/files/
+            gum log --level info "Wrote file at remote server in /files/ folder." | ssh "$SERVER_HOSTNAME" -p "$SERVER_PORT" -T "cat > /file/"$file_path""
             ;;
         "View Files")
-            if [[ "$-" == *x* ]]; then
-                gum log --level debug "Viewing files..."
-            fi
             chosen = $(gum file --all $SERVER_ADDR)
             gum pager > $chosen
+            ;;
+        "Help")
+            glow github.com/FBDev64/ASCINET/
             ;;
         "Quit")
             exit 0
