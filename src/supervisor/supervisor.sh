@@ -52,8 +52,7 @@ while true; do
             gum log --level info "Wrote file at remote server in /files/ folder." | ssh "$SERVER_USER"@"$SERVER_IP" -p "$SERVER_PORT" -T "cat > /file/"$file_path""
             ;;
         "View Files")
-            ssh "$SERVER_HOSTNAME" -p "$SERVER_PORT" -T "cat > /file/"$file_path"" | chosen = $(gum file --all $SERVER_ADDR)
-            gum pager < "$chosen"
+            ssh "$SERVER_USER"@"$SERVER_IP" -p "$SERVER_PORT" | ls
             ;;
         "Help")
             glow github.com/FBDev64/ASCINET/
