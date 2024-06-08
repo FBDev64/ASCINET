@@ -2,8 +2,6 @@
 
 # Server address and port
 
-
-
 SERVER_HOSTNAME=$(gum input --placeholder="user@ip")
 SERVER_PORT=8080
 
