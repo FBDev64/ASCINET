@@ -48,9 +48,9 @@ while true; do
             gum log --level info "$message"
             ;;
         "Send File")
-            file_path=$(gum file "$(pwd)")
+            file_path=$(gum file /)
             gum log --level info "Sending file: $file_path"
-            echo "file:$(cat "$file_path")" >&3
+            scp -r "$file_path" "$SERVER_USER@$SERVER_IP:~/ASCINET/files/"
             ;;
         "View Files")
             # Send a command to the server to list files
