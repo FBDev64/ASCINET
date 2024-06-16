@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Server address and port
-
 SERVER_USER=$(gum input --placeholder="Remote user")
 SERVER_IP=$(gum input --placeholder="Remote IP")
 SERVER_PORT=8080
@@ -10,7 +9,7 @@ SERVER_PORT=8080
 SUPERVISORS=("fbdev")
 SUPERVISOR_PASSWORD="3310"
 
-# Connect to the server
+# Connect to the Soft-Serve server
 exec 3<>/dev/tcp/$SERVER_IP/$SERVER_PORT || exit 1
 gum log --level info "Connected to $SERVER_USER@$SERVER_IP:$SERVER_PORT" >&2
 
@@ -31,32 +30,38 @@ if $is_supervisor; then
     else
         gum confirm "Incorrect password for $username" --affirmative "Try Again" || exit 1
     fi
-else
-    gum confirm "Non-supervisor user" --affirmative "Exit" || exit 1
 fi
 
 while true; do
-    action=$(gum choose "Alert" "Send Message" "Send File" "View Files" "Help" "Quit")
+    action=$(gum choose "Alert" "Send Message" "Send File" "View Files" "Docs" "Quit")
     case "$action" in
         "Alert")
             ALERT_MSG=$(gum input --placeholder="Alert Message: ")
             gum log --level warn "$ALERT_MSG"
+            # Send the alert message to the server
+            echo "$ALERT_MSG" >&3
             ;;
         "Send Message")
             message=$(gum input --prompt "Enter the message: ")
-            echo "$message" > /dev/tty
+            # Send the message to the server
+            echo "$message" >&3
             gum log --level info "$message"
             ;;
         "Send File")
             file_path=$(gum file "$(pwd)")
-            gum log --level info "Wrote file at remote server in /files/ folder." | ssh "$SERVER_USER"@"$SERVER_IP" -p "$SERVER_PORT" -T "cat > /file/"$file_path""
+            gum log --level info "Sending file: $file_path"
+            echo "file:$(cat "$file_path")" >&3
             ;;
         "View Files")
-            ssh "$SERVER_USER"@"$SERVER_IP" -p "$SERVER_PORT"
-	    ls
+            # Send a command to the server to list files
+            echo "/list_files" >&3
+            # Read the server response
+            while read -r line; do
+                echo "$line"
+            done <&3
             ;;
-        "Help")
-            glow github.com/FBDev64/ASCINET/
+        "Docs")
+            glow github.com/fbdev64/ASCINET
             ;;
         "Quit")
             exit 0
