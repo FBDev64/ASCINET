@@ -10,6 +10,7 @@ You need to have the following :
 - The remote IP and username of server
 - The `server.sh` file running in server
 - Sh or Bash and Gum
+- Port 8080, 8008 and 8800 unused
 
 ## Server Setup
 Download server.sh then :
