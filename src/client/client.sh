@@ -2,7 +2,7 @@
 
 # Load configuration from config.yaml
 CONFIG_FILE=~/ASCINET/src/server/data/config.yaml
-eval "$(parse_yaml "$CONFIG_FILE" "config_")"
+eval "$(bash parse_yaml.sh "$CONFIG_FILE" "config_")"
 
 # Server address and port
 SERVER_USER="${config_server_remote_user}"
