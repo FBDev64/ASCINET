@@ -3,38 +3,40 @@ Advanced SSH Computer Intranetwork
 Roles : Server, Supervisor, Client
 The Supervisor is the network and server Administrator.
 
-## Configuration
+## Needs
 You need to have the following :
 
 - Unix based server and supervisor
 - The remote IP and username of server
-- The `server.sh` file running in server
-- Sh or Bash and Gum
+- Sh or Bash, NetCat, Soft-Serve, Gum, Glow
 - Port 8080, 8008 and 8800 unused
 
 ## Server Setup
-Download server.sh then :
 ```
-cd /
-mkdir ASCINET
-cp server.sh ASCINET/
-cd ASCINET/
+cd ~
+git clone https://github.com/fbdev64/ASCINET.git
+cd ASCINET/src/server
 chmod +x server.sh
 ```
-To run, just type `./server.sh` 
+To run, just type `./server.sh`
+## Admin Setup
+```
+cd ~
+git clone https://github.com/fbdev64/ASCINET.git
+cd ASCINET/src/admin
+chmod +x admin.sh
+```
+To run, just type `./admin.sh`
 
-## Supervisor Setup
-Download supervisor.sh then :
+## Clien Setup
 ```
-chmod +x suprvisor.sh
-```
-To run, just type `./supervisor.sh`
-
-## Client Setup
-Download vlient.sh then :
-```
+cd ~
+git clone https://github.com/fbdev64/ASCINET.git
+cd ASCINET/src/client
 chmod +x client.sh
 ```
 To run, just type `./client.sh`
 
-
+## Configuring
+- **Edit** the `config.yaml` in `/src/server/data` and write your server IP and hostname
+- **Run** `server.sh` in the server computer

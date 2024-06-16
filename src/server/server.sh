@@ -1,20 +1,14 @@
 #!/bin/bash
 
-# Server port
+# Load configuration from config.yaml
+CONFIG_FILE="config.yaml"
+eval "$(parse_yaml "$CONFIG_FILE" "config_")"
+
+# Server address and port
+SERVER_USER="${config_server_remote_user}"
+SERVER_IP="${config_server_remote_ip}"
 SERVER_PORT=8080
 
-# Log files
-MESSAGE_LOG="server.log"
-
 # Start the Soft-Serve server
-gum log --level info "Server started on port $SERVER_PORT. Logs are being written to $MESSAGE_LOG."
-soft serve
-
-# Function to display logs
-display_logs() {
-    gum pager < "$MESSAGE_LOG"
-}
-
-while true; do
-    display_logs
-done
+soft_serve --config config.yaml --bind "$SERVER_IP:$SERVER_PORT"
+gum log --level info "Soft-Serve server started on $SERVER_IP:$SERVER_PORT"

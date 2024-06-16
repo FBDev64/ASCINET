@@ -38,69 +38,35 @@ ssh:
   # A value of 0 means no timeout.
   idle_timeout: 600
 
-# Custom handlers
-handlers:
-  /message:
+server:
+  remote_user: your_server_user
+  remote_ip: your_remote_ip_address
+
+  /send_file:
     type: func
     value: |
       func(conn soft_serve.Connection) {
-        scanner := bufio.NewScanner(conn)
-        for scanner.Scan() {
-          line := scanner.Text()
-          fileName := fmt.Sprintf("%d.txt", conn.ID())
-          f, err := os.Create(fileName)
-          if err != nil {
-            log.Printf("failed to create file: %v", err)
-            continue
-          }
-          defer f.Close()
-
-          _, err = fmt.Fprintln(f, line)
-          if err != nil {
-            log.Printf("failed to write message: %v", err)
-            continue
-          }
-          log.Printf("Received message: %s", line)
+        file_path, err := conn.ReadString()
+        if err != nil {
+          log.Printf("failed to read file path: %v", err)
+          return
         }
-        if err := scanner.Err(); err != nil {
-          log.Printf("scan error: %v", err)
+        if file_path != "" {
+          log.Printf("Receiving file: %s", file_path)
+          err = conn.ReceiveFile(file_path, "files/")
+          if err != nil {
+            log.Printf("failed to receive file: %v", err)
+          }
+        } else {
+          log.Println("No file selected")
         }
       }
 
-  /file:
+  /view_files:
     type: func
     value: |
       func(conn soft_serve.Connection) {
-        scanner := bufio.NewScanner(conn)
-        for scanner.Scan() {
-          line := scanner.Text()
-          if strings.HasPrefix(line, "file:") {
-            fileName := fmt.Sprintf("%d.txt", conn.ID())
-            f, err := os.Create(fileName)
-            if err != nil {
-              log.Printf("failed to create file: %v", err)
-              continue
-            }
-            defer f.Close()
-
-            _, err = io.Copy(f, strings.NewReader(strings.TrimPrefix(line, "file:")))
-            if err != nil {
-              log.Printf("failed to write file: %v", err)
-              continue
-            }
-            log.Printf("Received file: %s", fileName)
-          }
-        }
-        if err := scanner.Err(); err != nil {
-          log.Printf("scan error: %v", err)
-        }
-      }
-
-  /list_files:
-    type: func
-    value: |
-      func(conn soft_serve.Connection) {
-        files, err := os.ReadDir(".")
+        files, err := os.ReadDir("files/")
         if err != nil {
           log.Printf("failed to read files directory: %v", err)
           return

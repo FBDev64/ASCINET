@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# Load configuration from config.yaml
+CONFIG_FILE="~/ASCINET/src/server/data/config.yaml"
+eval "$(parse_yaml "$CONFIG_FILE" "config_")"
+
 # Server address and port
-SERVER_USER=$(gum input --placeholder="Remote user")
-SERVER_IP=$(gum input --placeholder="Remote IP")
+SERVER_USER="${config_server_remote_user}"
+SERVER_IP="${config_server_remote_ip}"
 SERVER_PORT=8080
 
 # List of authorized supervisor computers
@@ -32,33 +36,45 @@ if $is_supervisor; then
     fi
 fi
 
+# Send File
+send_file() {
+    file_path=$(gum file "$(pwd)")
+    if [ -n "$file_path" ]; then
+        gum log --level info "Sending file: $file_path"
+        echo "$file_path" >&3
+        scp "$file_path" "$SERVER_USER@$SERVER_IP:~/ASCINET/files/"
+    else
+        gum log --level error "No file selected"
+    fi
+}
+
+# View Files
+view_files() {
+    gum log --level info "Listing files on $SERVER_USER@$SERVER_IP:~/ASCINET/files/"
+    echo "/view_files" >&3
+    while read -r line; do
+        echo "$line"
+    done <&3
+}
+
 while true; do
     action=$(gum choose "Alert" "Send Message" "Send File" "View Files" "Docs" "Quit")
     case "$action" in
         "Alert")
             ALERT_MSG=$(gum input --placeholder="Alert Message: ")
             gum log --level warn "$ALERT_MSG"
-            # Send the alert message to the server
             echo "$ALERT_MSG" >&3
             ;;
         "Send Message")
             message=$(gum input --prompt "Enter the message: ")
-            # Send the message to the server
             echo "$message" >&3
             gum log --level info "$message"
             ;;
         "Send File")
-            file_path=$(gum file /)
-            gum log --level info "Sending file: $file_path"
-            scp -r "$file_path" "$SERVER_USER@$SERVER_IP:~/ASCINET/files/"
+            d_file
             ;;
         "View Files")
-            # Send a command to the server to list files
-            echo "/list_files" >&3
-            # Read the server response
-            while read -r line; do
-                echo "$line"
-            done <&3
+            view_files
             ;;
         "Docs")
             glow github.com/fbdev64/ASCINET
