@@ -39,8 +39,8 @@ ssh:
   idle_timeout: 600
 
 server:
-  remote_user: your_server_user
-  remote_ip: your_remote_ip_address
+  remote_user: fbdev
+  remote_ip: 192.168.1.23
 
   /send_file:
     type: func
