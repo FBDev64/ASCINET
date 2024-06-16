@@ -3,6 +3,7 @@
 # Server address and port
 SERVER_USER=$(gum input --placeholder="Remote user")
 SERVER_IP=$(gum input --placeholder="Remote IP")
+SERVER_PORT=8080
 
 # Connect to the Soft-Serve server
 exec 3<>/dev/tcp/$SERVER_IP/$SERVER_PORT || exit 1
