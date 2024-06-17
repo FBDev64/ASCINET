@@ -21,7 +21,7 @@ ssh:
 
   # The public URL of the SSH server.
   # This is the address that will be used to clone repositories.
-  # public_url: "ssh://localhost:23231"
+  public_url: "ssh://localhost:2222"
 
   # The path to the SSH server's private key.
   key_path: ssh/soft_serve_host_ed25519
@@ -38,40 +38,8 @@ ssh:
   # A value of 0 means no timeout.
   idle_timeout: 600
 
+# Edit this to match your server's configuration.
 server:
   remote_user: fbdev
   remote_ip: 192.168.1.23
 
-  /send_file:
-    type: func
-    value: |
-      func(conn soft_serve.Connection) {
-        file_path, err := conn.ReadString()
-        if err != nil {
-          log.Printf("failed to read file path: %v", err)
-          return
-        }
-        if file_path != "" {
-          log.Printf("Receiving file: %s", file_path)
-          err = conn.ReceiveFile(file_path, "files/")
-          if err != nil {
-            log.Printf("failed to receive file: %v", err)
-          }
-        } else {
-          log.Println("No file selected")
-        }
-      }
-
-  /view_files:
-    type: func
-    value: |
-      func(conn soft_serve.Connection) {
-        files, err := os.ReadDir("files/")
-        if err != nil {
-          log.Printf("failed to read files directory: %v", err)
-          return
-        }
-        for _, file := range files {
-          fmt.Fprintln(conn, file.Name())
-        }
-      }

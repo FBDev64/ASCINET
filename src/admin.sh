@@ -1,12 +1,8 @@
 #!/bin/bash
 
-# Load configuration from config.yaml
-CONFIG_FILE="~/ASCINET/src/server/data/config.yaml"
-eval "$(bash parse_yaml "$CONFIG_FILE" "config_")"
-
 # Server address and port
-SERVER_USER="${config_server_remote_user}"
-SERVER_IP="${config_server_remote_ip}"
+SERVER_USER="$(gum input --placeholder="Enter Remote User")"
+SERVER_IP="gum input --placeholder="Enter Remote IP")"
 SERVER_PORT=8080
 
 # List of authorized supervisor computers

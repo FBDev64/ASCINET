@@ -1,16 +1,12 @@
 #!/bin/bash
 
-# Load configuration from config.yaml
-CONFIG_FILE=~/ASCINET/src/server/data/config.yaml
-eval "$(bash parse_yaml.sh "$CONFIG_FILE" "config_")"
-
 # Server address and port
-SERVER_USER="${config_server_remote_user}"
-SERVER_IP="${config_server_remote_ip}"
+SERVER_USER="$(gum input --placeholder="Enter Remote User")"
+SERVER_IP="gum input --placeholder="Enter Remote IP")"
 SERVER_PORT=8080
 
 # Connect to the Soft-Serve server
-exec 3<>/dev/tcp/$SERVER_IP/$SERVER_PORT || exit 1
+exec 3<>/dev/tcp/"$SERVER_IP"/"$SERVER_PORT" || exit 1
 gum log --level info "Connected to $SERVER_USER@$SERVER_IP:$SERVER_PORT" >&2
 
 # Send File
@@ -22,12 +18,6 @@ send_file() {
     else
         gum log --level error "No file selected"
     fi
-}
-
-# View Files
-view_files() {
-    gum log --level info "Listing files on $SERVER_USER@$SERVER_IP:~/ASCINET/files/"
-    ssh "$SERVER_USER@$SERVER_IP" "ls -l ~/ASCINET/files/"
 }
 
 while true; do
