@@ -1,7 +1,5 @@
 # ASCINET
 Advanced SSH Computer Intranetwork
-Roles : Server, Supervisor, Client
-The Supervisor is the network and server Administrator.
 
 ## Needs
 You need to have the following :
@@ -37,6 +35,9 @@ chmod +x client.sh
 ```
 To run, just type `./client.sh`
 
+
+## Additionnal Setup notes
+Instead of cloning the whole repo, you can just downmload the ASCINET folder with the files subdirectory for the server. It needs to be in `~/`. And of course the server dir or adfmin or client.
 ## Configuring
 - **Edit** the `config.yaml` in `/src/server/data` and write your server IP and hostname
 - **Run** `server.sh` in the server computer
