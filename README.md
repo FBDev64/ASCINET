@@ -1,14 +1,6 @@
 # ASCINET
 Advanced SSH Computer Intranetwork
 
-## Needs
-You need to have the following :
-
-- Unix based server and supervisor
-- The remote IP and username of server
-- Sh or Bash, NetCat, Soft-Serve, Gum, Glow
-- Port 8080, 8008 and 8800 unused
-
 ## Server Setup
 ```
 cd ~
@@ -35,6 +27,7 @@ server
 ```
 
 To run, just type `./server.sh`, then edit the `config.yaml` file.
+
 ## Admin Setup
 ```
 cd ~
@@ -53,16 +46,23 @@ chmod +x client.sh
 ```
 To run, just type `./client.sh`
 
-<<<<<<< HEAD
-
 ## Additionnal Setup notes
 Instead of cloning the whole repo, you can just downmload the ASCINET folder with the files subdirectory for the server. It needs to be in `~/`. And of course the server dir or adfmin or client.
-=======
+
 ## Notes
 - All the files sould be run individually, and there are no file dependencies.
 - The files are in the `src` folder.
 
->>>>>>> cb8acb9 (old techique of auth...)
 ## Configuring
 - **Edit** the `config.yaml` in `/src/server/data` and write your server IP and hostname
-- **Run** `server.sh` in the server computer
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+[BSD 3-Clause “New” or “Revised” License](https://choosealicense.com/licenses/bsd-3-clause/)
