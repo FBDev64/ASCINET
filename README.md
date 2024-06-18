@@ -9,24 +9,10 @@ cd ASCINET/src/server
 chmod +x server.sh
 
 ```
-The following is the tree of `~/ASCINET/src` relative to the server:
-```
-.
-└── server
-    ├── data
-    │   ├── config.yaml
-    │   ├── hooks
-    │   │   └── update.sample
-    │   ├── soft-serve.db
-    │   └── ssh
-    │       ├── soft_serve_client_ed25519
-    │       ├── soft_serve_client_ed25519.pub
-    │       ├── soft_serve_host_ed25519
-    │       └── soft_serve_host_ed25519.pub
-    └── server.sh
-```
 
 To run, just type `./server.sh`, then edit the `config.yaml` file.
+
+**For a complete detailed guide, check the SERVER.md**
 
 ## Admin Setup
 ```
