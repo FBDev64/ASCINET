@@ -9,14 +9,14 @@ cd ASCINET/src/server
 chmod +x server.sh
 
 ```
-The following is the tree of `~`:
+The following is the tree of `~/ASCINET/src` relative to the server:
 ```
-server
+.
+└── server
     ├── data
     │   ├── config.yaml
     │   ├── hooks
     │   │   └── update.sample
-    │   ├── log
     │   ├── soft-serve.db
     │   └── ssh
     │       ├── soft_serve_client_ed25519
@@ -47,11 +47,7 @@ chmod +x client.sh
 To run, just type `./client.sh`
 
 ## Additionnal Setup notes
-Instead of cloning the whole repo, you can just downmload the ASCINET folder with the files subdirectory for the server. It needs to be in `~/`. And of course the server dir or adfmin or client.
-
-## Notes
-- All the files sould be run individually, and there are no file dependencies.
-- The files are in the `src` folder.
+Instead of running `chmod +x ./the_file`, run the same command for launcher. It will ask you what type of user are you (Client, Admin or Server) and will run the file.
 
 ## Configuring
 - **Edit** the `config.yaml` in `/src/server/data` and write your server IP and hostname

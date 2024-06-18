@@ -12,8 +12,14 @@ while true; do
 		./src/client.sh
 	elif [ $usr_type == "S" ]; then
 		./src/server/server.sh
+	elif [ $usr_type == "Q" ]; then
+		exit	
 	else
 		gum log --level error "Enter A, C or S."
 		error_num = error_num + 1
 	fi
+
+	if [ "$error_num" -gt 10 ]; then
+	       gum log --level fatal "Are you mentally retarded ?"
+	fi	       
 done

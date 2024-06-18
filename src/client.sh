@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Gum Environment Variables
+export GUM_INPUT_CURSOR_FOREGROUND="       #0437F2"
+export GUM_INPUT_PROMPT="> "
+export GUM_INPUT_WIDTH=80
+
 # Server address and port
 SERVER_USER="$(gum input --placeholder="Enter Remote User")"
 SERVER_IP="gum input --placeholder="Enter Remote IP")"
@@ -32,7 +37,9 @@ while true; do
             send_file
             ;;
         "Docs")
-            glow github.com/fbdev64/ASCINET
+            cd ..
+	    soft
+	    cd src
             ;;
         "Quit")
             exit 0
