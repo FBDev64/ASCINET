@@ -4,7 +4,7 @@ Advanced SSH Computer Intranetwork
 ## Server Setup
 ```
 cd ~
-git clone https://github.com/fbdev64/ASCINET.git
+git clone https://github.com/AdamOnAir/ASCINET.git
 cd ASCINET/src/server
 chmod +x server.sh
 
@@ -17,7 +17,7 @@ To run, just type `./server.sh`, then edit the `config.yaml` file.
 ## Admin Setup
 ```
 cd ~
-git clone https://github.com/fbdev64/ASCINET.git
+git clone https://github.com/AdamOnAir/ASCINET.git
 cd ASCINET/src/admin
 chmod +x admin.sh
 ```
@@ -26,7 +26,7 @@ To run, just type `./admin.sh`
 ## Clien Setup
 ```
 cd ~
-git clone https://github.com/fbdev64/ASCINET.git
+git clone https://github.com/AdamOnAir/ASCINET.git
 cd ASCINET/src/client
 chmod +x client.sh
 ```
@@ -47,4 +47,4 @@ Please make sure to update tests as appropriate.
 
 ## License
 
-[BSD 3-Clause “New” or “Revised” License](https://choosealicense.com/licenses/bsd-3-clause/)
+[BSD 3-Clause “New” or “Revised” License](./LICENSE)
