@@ -1,5 +1,10 @@
 # ASCINET
+
 Advanced SSH Computer Intranetwork
+
+## Notes
+
+The project will get some updates(mainly to be Cross-Platform), and will be re-written in C using [Airlib](https://GitHub.com/AdamOnAir/Airlib).
 
 ## Server Setup
 ```
